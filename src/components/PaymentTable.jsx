@@ -1,6 +1,6 @@
 const PaymentTable = ({ months, currentDate, results, isSwitchOn, paymentType }) => {
     let totalPayment = results.totalPayment;
-  
+    console.log(results.payments)
     return (
       <table>
         <thead>
@@ -18,7 +18,7 @@ const PaymentTable = ({ months, currentDate, results, isSwitchOn, paymentType })
             const paymentDate = new Date(currentDate);
             paymentDate.setMonth(paymentDate.getMonth() + index);
             
-            let paymentAmount, remainingDebt;
+            let paymentAmount, remainingDebt, mainDebt, percentDebt;
             if (paymentType === 'annuity') {
               paymentAmount = index + 1 === months
                 ? results.totalPayment - index * results.monthlyPayment
@@ -26,10 +26,14 @@ const PaymentTable = ({ months, currentDate, results, isSwitchOn, paymentType })
               remainingDebt = index + 1 === months
                 ? 0
                 : results.totalPayment - (index + 1) * results.monthlyPayment;
+                mainDebt = (results.requiredLoanAmount - ((results.requiredLoanAmount / months)*(index+1)));
+                percentDebt = remainingDebt - mainDebt;
             } else {
               paymentAmount = results.payments[index]?.totalMonthlyPayment;
               totalPayment -= paymentAmount;
               remainingDebt = totalPayment;
+              mainDebt = results.payments[index]?.remainingBalance;
+              percentDebt = totalPayment - mainDebt;
             }
   
             return (
@@ -38,8 +42,8 @@ const PaymentTable = ({ months, currentDate, results, isSwitchOn, paymentType })
                 <td>{paymentDate.toLocaleDateString()}</td>
                 <td>{paymentAmount?.toLocaleString()} ₸</td>
                 <td>{remainingDebt?.toLocaleString()} ₸</td>
-                {isSwitchOn && <td>{paymentType === 'annuity' ? '' : 'Процентный долг'}</td>}
-                {isSwitchOn && <td>{paymentType === 'annuity' ? '' : 'Основной долг'}</td>}
+                {isSwitchOn && <td>{percentDebt.toLocaleString()+" ₸"}</td>}
+                {isSwitchOn && <td>{mainDebt.toLocaleString()+" ₸"}</td>}
               </tr>
             );
           })}

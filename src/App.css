@@ -225,6 +225,10 @@ body {
   background-color: #28a745;
 }
 
+.overpayment-bar {
+  background-color: #6c757d;
+}
+
 .bar-labels {
   display: flex;
   flex-direction: column;

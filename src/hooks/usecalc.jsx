@@ -6,7 +6,7 @@ export const useMortgageCalculator = () => {
   const [loanAmount, setLoanAmount] = useState(1000000);
   const [monthlyPaymentInput, setMonthlyPaymentInput] = useState(200000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(10);
-  const [loanTerm, setLoanTerm] = useState(15);
+  const [loanTerm, setLoanTerm] = useState(5);
   const [interestRate, setInterestRate] = useState(12.5);
   const [paymentType, setPaymentType] = useState('annuity');
 

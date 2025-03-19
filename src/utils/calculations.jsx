@@ -85,8 +85,9 @@ export const calculateMortgage = ({
     overpayment: Math.round(overpayment),
     totalPayment: Math.round(totalPayment),
     requiredIncome: Math.round(requiredIncome),
-    loanPercentage: (requiredLoanAmount / loanAmountCalc) * 100,
-    downPaymentPercentage: (downPayment / loanAmountCalc) * 100,
+    loanPercentage: (requiredLoanAmount / totalPayment) * 100,
+    downPaymentPercentage: (downPayment / totalPayment) * 100,
+    overPaymentPercantage: (overpayment / totalPayment) * 100,
     payments, // Добавляем массив с платежами
   };
 };

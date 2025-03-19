@@ -15,6 +15,10 @@ export default function Result({ results, activeTab }) {
           className="bar downpayment-bar"
           style={{ width: `${results.downPaymentPercentage}%` }}
         ></div>
+        <div
+          className="bar overpayment-bar"
+          style={{ width: `${results.overPaymentPercantage}%` }}
+        ></div>
       </div>
       <div className="bar-labels">
         <span>
@@ -37,8 +41,17 @@ export default function Result({ results, activeTab }) {
           }}></span>
           Первоначальная <span className="result-initial">{results.downPayment.toLocaleString()} ₸</span>
         </span>
+        <span>
+        <span style={{
+            width: "13px",
+            height: "13px",
+            backgroundColor: "#6c757d",
+            borderRadius: "50%",
+            display: "inline-block"
+          }}></span>
+          Переплата <span className="result-initial">{results.overpayment.toLocaleString()} ₸</span>
+        </span>
       </div>
-
       <div className="result">
         <h3>
           {activeTab === 'by-cost'
