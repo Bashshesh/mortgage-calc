@@ -59,18 +59,30 @@ export const calculateMortgage = ({
       totalPayment = monthlyPaymentCalc * totalMonths; // Фиксируем totalPayment для аннуитета
     } else {
       // Дифференцированные платежи (по известному ежемесячному платежу)
-      let remainingBalance = 0;
-      let principalPayment = monthlyPaymentCalc / 2; // Предположительная часть основного долга
+      let remainingBalance = (monthlyPaymentCalc * (Math.pow(1 + monthlyRate, totalMonths) - 1)) /
+      (monthlyRate * Math.pow(1 + monthlyRate, totalMonths));
+      let principalPayment = (monthlyPaymentCalc * (Math.pow(1 + monthlyRate, totalMonths) - 1)) /
+      (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / totalMonths; // D (фиксированная часть основного долга)
+      requiredLoanAmount = (monthlyPaymentCalc * (Math.pow(1 + monthlyRate, totalMonths) - 1)) /
+      (monthlyRate * Math.pow(1 + monthlyRate, totalMonths));
 
       for (let i = 0; i < totalMonths; i++) {
-        let interestPayment = remainingBalance * monthlyRate;
-        remainingBalance += (monthlyPaymentCalc - interestPayment); 
+        let interestPayment = remainingBalance * monthlyRate; // I (проценты на остаток)
+        let totalMonthlyPayment = principalPayment + interestPayment; // M_i = D + I_i
+        
+        payments.push({
+          month: i + 1,
+          totalMonthlyPayment: Math.round(totalMonthlyPayment),
+          interestPayment: Math.round(interestPayment),
+          principalPayment: Math.round(principalPayment),
+          remainingBalance: Math.round(remainingBalance - principalPayment),
+        });
+        remainingBalance -= principalPayment;
       }
-
-      requiredLoanAmount = remainingBalance; 
+      monthlyPaymentCalc = payments[0].totalMonthlyPayment; // Первый платеж (максимальный)
       totalPayment = payments.reduce((sum, p) => sum + p.totalMonthlyPayment, 0); // Считаем totalPayment через сумму платежей
+      
     }
-
     loanAmountCalc = requiredLoanAmount / (1 - downPaymentPercent / 100);
     downPayment = loanAmountCalc - requiredLoanAmount;
   }

@@ -1,7 +1,9 @@
 import React from "react";
 import "/Users/bashshesh/Downloads/gh/mortgage-calculator/src/App.css";
+import { useTranslation } from 'react-i18next';
 
 const Modal = ({ isOpen, onClose, children }) => {
+    const { t } = useTranslation();
     if (!isOpen) return null;
 
     return (
@@ -9,7 +11,7 @@ const Modal = ({ isOpen, onClose, children }) => {
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 {children}
                 <button className="modal-close-button" onClick={onClose}>
-                    Закрыть
+                    {t('Закрыть')}
                 </button>
             </div>
         </div>

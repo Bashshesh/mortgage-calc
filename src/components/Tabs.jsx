@@ -1,7 +1,9 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 import '/Users/bashshesh/Downloads/gh/mortgage-calculator/src/App.css';
 
 export default function Tabs({ activeTab, handleTabSwitch}){
+  const {t} = useTranslation();
 
     return(
         <div className="tabs">
@@ -9,13 +11,13 @@ export default function Tabs({ activeTab, handleTabSwitch}){
                   className={`tab ${activeTab === 'by-cost' ? 'active' : ''}`}
                   onClick={() => handleTabSwitch('by-cost')}
                 >
-                  ПО СТОИМОСТИ НЕДВИЖИМОСТИ
+                  {t('ПО СТОИМОСТИ НЕДВИЖИМОСТИ')}
                 </button>
                 <button
                   className={`tab ${activeTab === 'by-payment' ? 'active' : ''}`}
                   onClick={() => handleTabSwitch('by-payment')}
                 >
-                  ПО ЕЖЕМЕСЯЧНОМУ ПЛАТЕЖУ
+                  {t('ПО ЕЖЕМЕСЯЧНОМУ ПЛАТЕЖУ')}
                 </button>
               </div>
     )

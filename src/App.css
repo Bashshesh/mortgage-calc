@@ -100,6 +100,14 @@ tr:hover {
   background-color: #e9ecef;
 }
 
+.last-th {
+  background-color: #505152;
+}
+
+.last-td {
+  background-color: #b7b9bc;
+}
+
 /* Reset default styles */
 * {
   margin: 0;
@@ -283,6 +291,34 @@ body {
 .buttons button:hover {
   background-color: #0056b3;
 }
+
+.button-group-lng {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.button-lng {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.button-lng:hover {
+  background-color: #e0e0e0;
+}
+
+.button-lng.active {
+  background-color: #007bff;
+  color: white;
+}
+
 
 /* Modal */
 .modal-table-container {
