@@ -1,6 +1,6 @@
-import React from 'react';
-import '/Users/bashshesh/Downloads/gh/mortgage-calculator/src/App.css';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import '/Users/bashshesh/Downloads/gh/mortgage-calculator/src/App.css';
 
 export default function Input({
   loanAmount, setLoanAmount,
@@ -11,20 +11,29 @@ export default function Input({
   paymentType, setPaymentType,
   results, activeTab, setActiveTab,
   numericLoanAmount, setNumericLoanAmount,
-  numericMonthlyPaymentInput, setNumericMonthlyPaymentInput
+  numericMonthlyPaymentInput, setNumericMonthlyPaymentInput,
+  maxLoanAmount, maxTerm, minDownPaymentPercent, interestRateRange, isActive, programId
 }) {
-  const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  const removeNonNumeric = num => num.toString().replace(/[^0-9]/g, "");
-  const {t} = useTranslation();
+  const addCommas = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const removeNonNumeric = (num) => num.toString().replace(/[^0-9]/g, "");
+  const { t } = useTranslation();
 
   const handleInputChange = (event) => {
-    const rawValue = removeNonNumeric(event.target.value); //
-    const numericValue = Number(rawValue); 
-    setLoanAmount(numericValue);
-    setNumericLoanAmount(addCommas(rawValue));
-    setMonthlyPaymentInput(numericValue);
-    setNumericMonthlyPaymentInput(addCommas(rawValue));
+    const rawValue = removeNonNumeric(event.target.value);
+    const numericValue = Number(rawValue);
+    // Если maxLoanAmount не определён (нет активной программы), разрешаем любой ввод
+    if (maxLoanAmount === undefined || numericValue <= maxLoanAmount) {
+      setLoanAmount(numericValue);
+      setNumericLoanAmount(addCommas(rawValue));
+      setMonthlyPaymentInput(numericValue);
+      setNumericMonthlyPaymentInput(addCommas(rawValue));
+    } else {
+      console.log(programId)
+      alert(`Максимальная сумма кредита: ${maxLoanAmount || "Не задано"}`);
+    }
   };
+
+  const downPayment = results?.downPayment?.toLocaleString() || '0';
 
   return (
     <div className="input-section">
@@ -37,6 +46,7 @@ export default function Input({
               value={numericLoanAmount}
               onChange={handleInputChange}
             />
+            {console.log(maxLoanAmount)}
             <span>₸</span>
           </div>
         </div>
@@ -62,7 +72,7 @@ export default function Input({
           onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
         />
         <span>%</span>
-        <span>{results.downPayment.toLocaleString()} ₸</span>
+        <span>{downPayment} ₸</span>
       </div>
 
       <label>{t('СРОК')}</label>
@@ -71,13 +81,11 @@ export default function Input({
           value={loanTerm}
           onChange={(e) => setLoanTerm(Number(e.target.value))}
         >
-          <option value="1">1 {t('лет')}</option>
-          <option value="3">3 {t('лет')}</option>
-          <option value="5">5 {t('лет')}</option>
-          <option value="7">7 {t('лет')}</option>
-          <option value="10">10 {t('лет')}</option>
-          <option value="15">15 {t('лет')}</option>
-          <option value="20">20 {t('лет')}</option>
+          {[1, 3, 5, 7, 10, 15, 20].map((term) => (
+            <option key={term} value={term}>
+              {term} {t('лет')}
+            </option>
+          ))}
         </select>
       </div>
 

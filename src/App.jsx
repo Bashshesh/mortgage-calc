@@ -7,6 +7,12 @@ import './App.css';
 import Modal from './components/modal.jsx';
 import ModalContent from './components/Schedule.jsx';
 import { useTranslation } from 'react-i18next';
+import Programs from './components/programs.jsx';
+import LngButtons from './components/lngButtons.jsx';
+import AltynBankConfig from './components/programs/config/AltynBankConfig.jsx';
+import Bank2Config from './components/programs/config/Bank2Config.jsx';
+import Bank3Config from './components/programs/config/Bank3Config.jsx';
+import Bank4Config from './components/programs/config/Bank4Config.jsx';
 
 const App = () => {
   const {
@@ -23,45 +29,41 @@ const App = () => {
   } = useMortgageCalculator();
 
   const [open, setOpen] = React.useState(false);
+  const [activeProgramConfig, setActiveProgramConfig] = React.useState(null); // По умолчанию нет активной программы
   const { i18n, t } = useTranslation();
 
-  const [activeLanguage, setActiveLanguage] = React.useState(i18n.language || 'ru');
+  const programConfigs = {
+    1: AltynBankConfig,
+    2: Bank2Config,
+    3: Bank3Config,
+    4: Bank4Config,
+  };
 
-  function changeLanguage(e) {
-    const newLang = e.target.value;
-    i18n.changeLanguage(newLang);
-    setActiveLanguage(newLang);
-  }
+  const handleProgramChange = (programId) => {
+    setActiveProgramConfig(programConfigs[programId] || null); // Устанавливаем конфигурацию или null
+  };
 
   return (
     <div className="calculator">
-      <div className='button-group-lng'>
-        <button
-          className={`button-lng ${activeLanguage === 'en' ? 'active' : ''}`}
-          onClick={changeLanguage}
-          value='en'
-        >
-          English
-        </button>
-        <button
-          className={`button-lng ${activeLanguage === 'kz' ? 'active' : ''}`}
-          onClick={changeLanguage}
-          value='kz'
-        >
-          Қазақша
-        </button>
-        <button
-          className={`button-lng ${activeLanguage === 'ru' ? 'active' : ''}`}
-          onClick={changeLanguage}
-          value='ru'
-        >
-          Русский
-        </button>
-        </div>
+      <LngButtons />
       <Tabs activeTab={activeTab} handleTabSwitch={setActiveTab} />
       <div className="calculator-content">
         <Input
-          {...{ numericMonthlyPaymentInput, setNumericMonthlyPaymentInput, numericLoanAmount, setNumericLoanAmount, loanAmount, setLoanAmount, monthlyPaymentInput, setMonthlyPaymentInput, downPaymentPercent, setDownPaymentPercent, loanTerm, setLoanTerm, interestRate, setInterestRate, paymentType, setPaymentType, results, activeTab }}
+          {...{
+            numericMonthlyPaymentInput, setNumericMonthlyPaymentInput,
+            numericLoanAmount, setNumericLoanAmount,
+            loanAmount, setLoanAmount,
+            monthlyPaymentInput, setMonthlyPaymentInput,
+            downPaymentPercent, setDownPaymentPercent,
+            loanTerm, setLoanTerm,
+            interestRate, setInterestRate,
+            paymentType, setPaymentType,
+            results, activeTab, setActiveTab,
+            maxLoanAmount: activeProgramConfig?.maxLoanAmount,
+            maxTerm: activeProgramConfig?.maxTerm,
+            minDownPaymentPercent: activeProgramConfig?.minDownPaymentPercent,
+            interestRateRange: activeProgramConfig?.interestRateRange,
+          }}
         />
         <Result results={results} activeTab={activeTab} />
       </div>
@@ -72,9 +74,11 @@ const App = () => {
 
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         <div className="modal-table-container">
-          <ModalContent loanTerm={loanTerm} results={results} paymentType={paymentType}/>
+          <ModalContent loanTerm={loanTerm} results={results} paymentType={paymentType} />
         </div>
       </Modal>
+
+      <Programs onProgramChange={handleProgramChange} />
     </div>
   );
 };

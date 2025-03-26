@@ -9,6 +9,7 @@ export const calculateMortgage = ({
 }) => {
   let loanAmountCalc, monthlyPaymentCalc, requiredLoanAmount, downPayment;
   let payments = [];
+  let maxValue = "100000000";
 
   const monthlyRate = interestRate / 100 / 12;
   const totalMonths = loanTerm * 12;
@@ -101,5 +102,6 @@ export const calculateMortgage = ({
     downPaymentPercentage: (downPayment / totalPayment) * 100,
     overPaymentPercantage: (overpayment / totalPayment) * 100,
     payments, // Добавляем массив с платежами
+    maxValue,
   };
 };

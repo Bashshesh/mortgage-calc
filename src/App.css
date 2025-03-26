@@ -449,3 +449,47 @@ body {
     padding: 1rem 2rem;
   }
 }
+
+/* programs */
+
+.programsBlock {
+  border: 2.5px solid black;
+  border-radius: 10px;
+  margin-top: 70px;
+}
+
+.program {
+  border: 1px solid black;
+  border-radius: 8px;
+  margin: 10px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.program:hover {
+  background-color: #959191;
+  transition: background 0.4s ease;
+}
+
+.program.active {
+  background-color: #4caf50;
+  border-color: #388e3c;
+  color: white;
+}
+
+.header-program {
+  border-bottom: 1px solid black;
+  padding: 10px;
+}
+
+.desc-block {
+  padding: 10px;
+  display: flex;
+  gap: 50px;
+  justify-content: end;
+}
+
+.desc-text {
+  font-weight: bold;
+}
+
