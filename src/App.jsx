@@ -26,21 +26,16 @@ const App = () => {
     interestRate, setInterestRate,
     paymentType, setPaymentType,
     results,
+    activeProgramConfig,
+    handleProgramChange,
   } = useMortgageCalculator();
 
   const [open, setOpen] = React.useState(false);
-  const [activeProgramConfig, setActiveProgramConfig] = React.useState(null); // По умолчанию нет активной программы
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
 
-  const programConfigs = {
-    1: AltynBankConfig,
-    2: Bank2Config,
-    3: Bank3Config,
-    4: Bank4Config,
-  };
-
-  const handleProgramChange = (programId) => {
-    setActiveProgramConfig(programConfigs[programId] || null); // Устанавливаем конфигурацию или null
+  // Передаем конфигурацию напрямую в хук
+  const onProgramChange = (config) => {
+    handleProgramChange(config); // Просто передаем объект конфигурации
   };
 
   return (
@@ -59,10 +54,10 @@ const App = () => {
             interestRate, setInterestRate,
             paymentType, setPaymentType,
             results, activeTab, setActiveTab,
-            maxLoanAmount: activeProgramConfig?.maxLoanAmount,
-            maxTerm: activeProgramConfig?.maxTerm,
-            minDownPaymentPercent: activeProgramConfig?.minDownPaymentPercent,
-            interestRateRange: activeProgramConfig?.interestRateRange,
+            maxLoanAmount: activeProgramConfig.maxLoanAmount,
+            maxTerm: activeProgramConfig.maxTerm,
+            minDownPaymentPercent: activeProgramConfig.minDownPaymentPercent,
+            interestRateRange: activeProgramConfig.interestRateRange, // Объект { min, max }
           }}
         />
         <Result results={results} activeTab={activeTab} />
@@ -78,7 +73,7 @@ const App = () => {
         </div>
       </Modal>
 
-      <Programs onProgramChange={handleProgramChange} />
+      <Programs onProgramChange={onProgramChange} />
     </div>
   );
 };

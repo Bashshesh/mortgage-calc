@@ -38,7 +38,12 @@
     "Показать таблицу": "Show table",
     "в месяц": "per month",
     "Месяцный процентный долг": "Monthly interest debt",
-    "Месяцный основной долг": "Monthly principal debt"
+    "Месяцный основной долг": "Monthly principal debt",
+    "Максимальная сумма кредита:": "Maximum loan amount:",
+    "Максимальный срок:": "Maximum period:",
+    "Минимальный первый взнос:": "Minimum down payment:",
+    "Диапазон процентной ставки:": "Interest rate range:"
+
 
     
 }

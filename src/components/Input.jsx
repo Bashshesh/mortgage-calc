@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import '/Users/bashshesh/Downloads/gh/mortgage-calculator/src/App.css';
 
@@ -12,23 +12,68 @@ export default function Input({
   results, activeTab, setActiveTab,
   numericLoanAmount, setNumericLoanAmount,
   numericMonthlyPaymentInput, setNumericMonthlyPaymentInput,
-  maxLoanAmount, maxTerm, minDownPaymentPercent, interestRateRange, isActive, programId
+  maxLoanAmount, maxTerm, minDownPaymentPercent, interestRateRange,
 }) {
   const addCommas = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   const removeNonNumeric = (num) => num.toString().replace(/[^0-9]/g, "");
   const { t } = useTranslation();
 
-  const handleInputChange = (event) => {
+  const handleLoanAmountChange = (event) => {
     const rawValue = removeNonNumeric(event.target.value);
     const numericValue = Number(rawValue);
-    // Если maxLoanAmount не определён (нет активной программы), разрешаем любой ввод
-    if (maxLoanAmount === undefined || numericValue <= maxLoanAmount || isActive == false) {
+
+    if (maxLoanAmount !== undefined && numericValue > maxLoanAmount) {
+      alert(`Максимальная сумма кредита: ${maxLoanAmount.toLocaleString()} ₸`);
+      setLoanAmount(maxLoanAmount);
+      setNumericLoanAmount(addCommas(maxLoanAmount));
+    } else {
       setLoanAmount(numericValue);
       setNumericLoanAmount(addCommas(rawValue));
-      setMonthlyPaymentInput(numericValue);
-      setNumericMonthlyPaymentInput(addCommas(rawValue));
+    }
+  };
+
+  const handleMonthlyPaymentChange = (event) => {
+    const rawValue = removeNonNumeric(event.target.value);
+    const numericValue = Number(rawValue);
+    setMonthlyPaymentInput(numericValue);
+    setNumericMonthlyPaymentInput(addCommas(rawValue));
+  };
+
+  const handleDownPaymentChange = (event) => {
+    const value = Number(event.target.value);
+    if (minDownPaymentPercent !== undefined && value < minDownPaymentPercent) {
+      alert(`Минимальный первоначальный взнос: ${minDownPaymentPercent}%`);
+      setDownPaymentPercent(minDownPaymentPercent);
     } else {
-      alert(`Максимальная сумма кредита: ${maxLoanAmount || "Не задано"}`);
+      setDownPaymentPercent(value);
+    }
+  };
+
+  const handleLoanTermChange = (event) => {
+    const value = Number(event.target.value);
+    if (maxTerm !== undefined && value > maxTerm) {
+      alert(`Максимальный срок кредита: ${maxTerm} лет`);
+      setLoanTerm(maxTerm);
+    } else {
+      setLoanTerm(value);
+    }
+  };
+
+  const handleInterestRateChange = (event) => {
+    const value = Number(event.target.value);
+    if (interestRateRange !== undefined) {
+      const { min, max } = interestRateRange; // Деструктурируем объект
+      if (value < min) {
+        alert(`Минимальная ставка: ${min}%`);
+        setInterestRate(min);
+      } else if (value > max) {
+        alert(`Максимальная ставка: ${max}%`);
+        setInterestRate(max);
+      } else {
+        setInterestRate(value);
+      }
+    } else {
+      setInterestRate(value);
     }
   };
 
@@ -43,9 +88,8 @@ export default function Input({
             <input
               type="text"
               value={numericLoanAmount}
-              onChange={handleInputChange}
+              onChange={handleLoanAmountChange}
             />
-            {console.log(maxLoanAmount)}
             <span>₸</span>
           </div>
         </div>
@@ -56,7 +100,7 @@ export default function Input({
             <input
               type="text"
               value={numericMonthlyPaymentInput}
-              onChange={handleInputChange}
+              onChange={handleMonthlyPaymentChange}
             />
             <span>₸</span>
           </div>
@@ -68,7 +112,7 @@ export default function Input({
         <input
           type="number"
           value={downPaymentPercent}
-          onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
+          onChange={handleDownPaymentChange}
         />
         <span>%</span>
         <span>{downPayment} ₸</span>
@@ -78,7 +122,7 @@ export default function Input({
       <div className="input-group">
         <select
           value={loanTerm}
-          onChange={(e) => setLoanTerm(Number(e.target.value))}
+          onChange={handleLoanTermChange}
         >
           {[1, 3, 5, 7, 10, 15, 20].map((term) => (
             <option key={term} value={term}>
@@ -94,7 +138,7 @@ export default function Input({
           type="number"
           step="0.1"
           value={interestRate}
-          onChange={(e) => setInterestRate(Number(e.target.value))}
+          onChange={handleInterestRateChange}
         />
         <span>%</span>
       </div>
