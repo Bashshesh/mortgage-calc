@@ -22,13 +22,12 @@ export default function Input({
     const rawValue = removeNonNumeric(event.target.value);
     const numericValue = Number(rawValue);
     // Если maxLoanAmount не определён (нет активной программы), разрешаем любой ввод
-    if (maxLoanAmount === undefined || numericValue <= maxLoanAmount) {
+    if (maxLoanAmount === undefined || numericValue <= maxLoanAmount || isActive == false) {
       setLoanAmount(numericValue);
       setNumericLoanAmount(addCommas(rawValue));
       setMonthlyPaymentInput(numericValue);
       setNumericMonthlyPaymentInput(addCommas(rawValue));
     } else {
-      console.log(programId)
       alert(`Максимальная сумма кредита: ${maxLoanAmount || "Не задано"}`);
     }
   };
