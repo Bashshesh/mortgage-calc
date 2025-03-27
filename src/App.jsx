@@ -9,10 +9,6 @@ import ModalContent from './components/Schedule.jsx';
 import { useTranslation } from 'react-i18next';
 import Programs from './components/programs.jsx';
 import LngButtons from './components/lngButtons.jsx';
-import AltynBankConfig from './components/programs/config/AltynBankConfig.jsx';
-import Bank2Config from './components/programs/config/Bank2Config.jsx';
-import Bank3Config from './components/programs/config/Bank3Config.jsx';
-import Bank4Config from './components/programs/config/Bank4Config.jsx';
 
 const App = () => {
   const {
